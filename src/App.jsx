@@ -1,21 +1,24 @@
-import { useState } from 'react'
 import './App.css'
 
 function App() {
   return (
-    <div>
-      <h1>Fitness-App</h1>
-      {/* Hier kommen später die Tools rein */}
-      <p>
+    <main className="app-shell">
+      <section className="hero-card">
+        <p className="eyebrow">Fitness & Lifestyle</p>
+        <h1>Meine Fitness-App</h1>
+        <p className="intro">
+          Kurz, klar und direkt – mein Weg, meine Motivation und mein Instagram.
+        </p>
         <a
+          className="instagram-link"
           href="https://instagram.com/luezventures"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Folge uns auf Instagram
+          Folge mir auf Instagram
         </a>
-      </p>
-    </div>
+      </section>
+    </main>
   )
 }
 
