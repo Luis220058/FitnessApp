@@ -1,55 +1,218 @@
-.app-shell {
+/* ============================================
+   LANDING PAGE STYLES — App.css
+   Nur für die Startseite. Später kommen die
+   Tool-Styles in eigene Dateien.
+   ============================================ */
+
+/* === LAYOUT === */
+
+/* Die Seite füllt mindestens den ganzen Bildschirm,
+   zentriert alles vertikal und horizontal */
+.landing {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 24px;
-  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
 }
 
-.hero-card {
-  max-width: 560px;
+/* === HINTERGRUND-GLOW ===
+   Zwei unsichtbare Kreise mit weichem Blau,
+   die den subtilen Lichtschimmer erzeugen.
+   ::before und ::after sind Pseudo-Elemente —
+   CSS-Trick, um Deko-Elemente ohne extra HTML zu machen */
+
+.landing::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(
+    circle,
+    rgba(79, 124, 255, 0.1) 0%,
+    transparent 70%
+  );
+  top: -150px;
+  right: -100px;
+  pointer-events: none;  /* Klicks gehen durch */
+}
+
+.landing::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle,
+    rgba(79, 124, 255, 0.06) 0%,
+    transparent 70%
+  );
+  bottom: -100px;
+  left: -50px;
+  pointer-events: none;
+}
+
+/* === HERO — der Claim-Bereich === */
+
+.hero {
+  text-align: center;
+  margin-bottom: 48px;
+  position: relative;  /* Damit es über den Glows liegt */
+  z-index: 1;
+}
+
+.claim {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+/* Der Punkt im Claim bekommt die Akzentfarbe —
+   ein kleines Detail, das auffällt */
+.claim-dot {
+  color: var(--accent);
+}
+
+.subtitle {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-muted);
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+/* === STATUS-BADGE ===
+   Das kleine "In Entwicklung"-Label */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 100px;  /* Macht es komplett rund/pill-förmig */
+  font-size: 13px;
+  color: var(--text-subtle);
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Der pulsierende grüne Punkt — zeigt "aktiv" */
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--success);
+  border-radius: 50%;
+  /* Animation: sanftes Pulsieren */
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Die Puls-Animation: Größe und Opacity wechseln sanft */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.3);
+  }
+}
+
+/* === VORSCHAU-KARTEN ===
+   Platzhalter für die kommenden Tools */
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 500px;
   width: 100%;
-  padding: 32px;
-  border-radius: 24px;
-  background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-  color: #f9fafb;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18);
+  margin-bottom: 48px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Einzelne Vorschau-Karte — Glas-Effekt */
+.preview-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 0.5px solid var(--glass-border);
+  border-top: 0.5px solid var(--glass-highlight);  /* Lichtkante */
+  border-radius: 16px;
+  padding: 20px 16px;
   text-align: center;
 }
 
-.eyebrow {
-  margin: 0 0 8px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #fbbf24;
+.preview-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: var(--accent);
 }
 
-.hero-card h1 {
-  margin: 0 0 12px;
-  font-size: clamp(2rem, 4vw, 2.7rem);
-  color: #ffffff;
+.preview-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
 }
 
-.intro {
-  margin: 0 0 20px;
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #d1d5db;
+/* === FOOTER === */
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
 }
 
-.instagram-link {
-  display: inline-block;
-  padding: 12px 18px;
-  border-radius: 999px;
-  background: #e11d48;
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: 600;
-  transition: background 0.2s ease;
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  transition: border-color 0.2s;
 }
 
-.instagram-link:hover {
-  background: #be123c;
+/* Hover-Effekt: Rand wird heller */
+.social-link:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.footer-text {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* === RESPONSIVE ===
+   Auf kleinen Screens (Handy) wird's angepasst */
+
+@media (max-width: 500px) {
+  .claim {
+    font-size: 36px;
+  }
+
+  .preview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
 }
