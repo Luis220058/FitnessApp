@@ -1,0 +1,348 @@
+/* ============================================
+   SATZLOGGER.CSS
+   Nutzt die Variablen aus index.css
+   ============================================ */
+
+.logger {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 24px 16px 60px;
+}
+
+/* === SECTIONS === */
+
+.section {
+  margin-bottom: 24px;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 10px;
+}
+
+/* === GRUPPEN-BUTTONS === */
+
+.gruppen-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.gruppe-btn {
+  padding: 16px 8px;
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
+  border-top: 0.5px solid var(--glass-highlight);
+  border-radius: 14px;
+  color: var(--text-subtle);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.gruppe-btn:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.gruppe-btn.aktiv {
+  background: rgba(79, 124, 255, 0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* === ÜBUNGS-BUTTONS === */
+
+.uebungen-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.uebung-btn {
+  padding: 14px 16px;
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.uebung-btn:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.uebung-btn.aktiv {
+  background: rgba(79, 124, 255, 0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* === LETZTES MAL === */
+
+.letztes-mal {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+  border-left: 2px solid var(--accent);
+}
+
+/* === EINGABE-KARTE === */
+
+.eingabe-karte {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 0.5px solid var(--glass-border);
+  border-top: 0.5px solid var(--glass-highlight);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.eingabe-reihe {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.eingabe-feld {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.eingabe-reihe .eingabe-feld {
+  margin-bottom: 0;
+}
+
+.eingabe-feld label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.eingabe-feld input {
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.eingabe-feld input:focus {
+  border-color: var(--accent);
+}
+
+.eingabe-feld input::placeholder {
+  color: #334155;
+}
+
+/* Pfeilchen bei number-inputs ausblenden */
+.eingabe-feld input[type="number"]::-webkit-inner-spin-button,
+.eingabe-feld input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* === RPE-SLIDER === */
+
+.rpe-bereich {
+  margin-bottom: 16px;
+}
+
+.rpe-kopf {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.rpe-kopf label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.rpe-wert {
+  font-size: 24px;
+  font-weight: 700;
+  transition: color 0.2s;
+}
+
+.rpe-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.rpe-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: currentColor;
+  cursor: pointer;
+  border: 2px solid var(--bg-primary);
+}
+
+.rpe-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: currentColor;
+  cursor: pointer;
+  border: 2px solid var(--bg-primary);
+}
+
+/* === SPEICHERN-BUTTON === */
+
+.speichern-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--accent);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.speichern-btn:hover {
+  background: var(--accent-light);
+}
+
+.speichern-btn:active {
+  transform: scale(0.98);
+}
+
+/* === SÄTZE-LISTE === */
+
+.saetze-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.satz-zeile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 12px;
+}
+
+.satz-nummer {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.satz-daten {
+  flex: 1;
+  min-width: 0;
+}
+
+.satz-haupt {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.satz-gewicht {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.satz-mal {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.satz-reps {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.satz-notiz {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.satz-rpe {
+  font-size: 15px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.loeschen-btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #334155;
+  font-size: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.loeschen-btn:hover {
+  color: var(--danger);
+}
+
+/* === RESPONSIVE === */
+
+@media (max-width: 400px) {
+  .gruppe-btn {
+    font-size: 11px;
+    padding: 14px 4px;
+  }
+}
