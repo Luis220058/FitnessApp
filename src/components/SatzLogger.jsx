@@ -156,6 +156,15 @@ function SatzLogger() {
   return (
     <div className="logger">
 
+       {/* Übersicht */}
+      <div className="info-karte">
+        <h2 className="info-titel">Der Satz-Logger</h2>
+        <p className="info-text">
+            Hier kannst du Gewicht, Wiederholungen und RPE pro Satz festhalten.
+            (Aktuell nur für einige Übungen, weitere folgen.)
+        </p>
+      </div>
+
       {/* --- SCHRITT 1: Gruppe wählen --- */}
       <div className="section">
         <div className="section-label">Gruppe</div>

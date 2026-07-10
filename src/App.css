@@ -1,13 +1,14 @@
 /* ============================================
-   APP.CSS — Der Rahmen
-   Nur Header und Grundlayout.
-   Tool-Styles liegen in components/
+   APP.CSS — Rahmen, Header, Navigation
    ============================================ */
 
 .app {
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
+
+  /* Platz unten für die fixe Navigation */
+  padding-bottom: 80px;
 }
 
 /* Hintergrund-Glow oben rechts */
@@ -31,7 +32,7 @@
 
 .app-header {
   text-align: center;
-  padding: 32px 24px 8px;
+  padding: 32px 24px 16px;
   position: relative;
   z-index: 1;
 }
@@ -54,10 +55,67 @@
   color: var(--text-muted);
 }
 
-/* Der Inhalt liegt über dem Glow */
-main {
+/* === MAIN === */
+
+.app-main {
   position: relative;
   z-index: 1;
+}
+
+/* === NAVIGATION UNTEN ===
+   position: fixed heißt: klebt am Bildschirm,
+   scrollt nicht mit. */
+
+.app-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px 20px;
+
+  /* Glas-Effekt für die Navigation */
+  background: rgba(8, 13, 25, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 0.5px solid var(--glass-border);
+
+  z-index: 10;
+}
+
+.nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 32px;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  color: #475569;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.nav-btn:hover {
+  color: var(--text-muted);
+}
+
+.nav-btn.aktiv {
+  color: var(--accent);
+}
+
+.nav-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.nav-label {
+  font-size: 10px;
+  font-weight: 500;
 }
 
 /* === RESPONSIVE === */
@@ -65,5 +123,9 @@ main {
 @media (max-width: 400px) {
   .claim {
     font-size: 26px;
+  }
+
+  .nav-btn {
+    padding: 8px 24px;
   }
 }
