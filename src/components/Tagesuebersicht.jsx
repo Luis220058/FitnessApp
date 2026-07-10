@@ -20,7 +20,7 @@
 
 import './Tagesuebersicht.css'
 
-function Tagesuebersicht({ saetze }) {
+function Tagesuebersicht({ saetze, onLoeschen }) {
 
   // Wenn heute nichts geloggt wurde, zeig nichts an.
   // "return null" heißt: rendere gar nichts.
@@ -125,6 +125,13 @@ function Tagesuebersicht({ saetze }) {
                   >
                     {satz.rpe}
                   </span>
+                  <button
+                    className="mini-loeschen-btn"
+                    onClick={() => onLoeschen(satz.id)}
+                    aria-label={`Satz ${i + 1} löschen`}
+                  >
+                    ×
+                  </button>
                 </div>
               ))}
             </div>
