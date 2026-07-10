@@ -6,8 +6,11 @@
    ============================================ */
 
 import { useState } from 'react'
+import { House, Dumbbell } from 'lucide-react'
+
 import Home from './components/Home'
 import Sport from './components/Sport'
+
 import './App.css'
 
 function App() {
@@ -40,7 +43,7 @@ function App() {
           className={`nav-btn ${seite === 'home' ? 'aktiv' : ''}`}
           onClick={() => setSeite('home')}
         >
-          <span className="nav-icon">◉</span>
+          <span className="nav-icon"><House size={20} /></span>
           <span className="nav-label">Start</span>
         </button>
 
@@ -48,7 +51,7 @@ function App() {
           className={`nav-btn ${seite === 'sport' ? 'aktiv' : ''}`}
           onClick={() => setSeite('sport')}
         >
-          <span className="nav-icon">▦</span>
+          <span className="nav-icon"><Dumbbell size={20} /></span>
           <span className="nav-label">Sport</span>
         </button>
       </nav>

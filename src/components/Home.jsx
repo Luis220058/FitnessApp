@@ -9,6 +9,7 @@
    ============================================ */
 
 import './Home.css'
+import { Check, Circle } from 'lucide-react'
 
 function Home() {
   return (
@@ -35,7 +36,7 @@ function Home() {
         <h2 className="info-titel">Was schon läuft</h2>
         <div className="feature-liste">
           <div className="feature fertig">
-            <span className="feature-status">✓</span>
+            <span className="feature-status"><Check size={16} /></span>
             <div>
               <div className="feature-name">Satz-Logger</div>
               <div className="feature-detail">
@@ -44,7 +45,7 @@ function Home() {
             </div>
           </div>
           <div className="feature fertig">
-            <span className="feature-status">✓</span>
+            <span className="feature-status"><Check size={16} /></span>
             <div>
               <div className="feature-name">Laufen</div>
               <div className="feature-detail">
@@ -53,7 +54,7 @@ function Home() {
             </div>
           </div>
           <div className="feature">
-            <span className="feature-status">○</span>
+            <span className="feature-status"><Circle size={16} /></span>
             <div>
               <div className="feature-name">Trainingsplan</div>
               <div className="feature-detail">
@@ -62,7 +63,7 @@ function Home() {
             </div>
           </div>
           <div className="feature">
-            <span className="feature-status">○</span>
+            <span className="feature-status"><Circle size={16} /></span>
             <div>
               <div className="feature-name">Statistiken</div>
               <div className="feature-detail">
@@ -71,7 +72,7 @@ function Home() {
             </div>
           </div>
           <div className="feature">
-            <span className="feature-status">○</span>
+            <span className="feature-status"><Circle size={16} /></span>
             <div>
               <div className="feature-name">Weitere Sportarten</div>
               <div className="feature-detail">
