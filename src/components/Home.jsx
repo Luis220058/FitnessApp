@@ -43,7 +43,7 @@ function Home() {
               </div>
             </div>
           </div>
-          <div className="feature">
+          <div className="feature fertig">
             <span className="feature-status">✓</span>
             <div>
               <div className="feature-name">Laufen</div>
