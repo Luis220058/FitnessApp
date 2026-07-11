@@ -9,7 +9,7 @@
    ============================================ */
 
 import './Home.css'
-import { Check, Circle } from 'lucide-react'
+import { Check, Circle, Minus } from 'lucide-react'
 
 function Home() {
   return (
@@ -53,21 +53,21 @@ function Home() {
               </div>
             </div>
           </div>
-          <div className="feature">
-            <span className="feature-status"><Circle size={16} /></span>
-            <div>
-              <div className="feature-name">Trainingsplan</div>
-              <div className="feature-detail">
-                Persönlichen Trainingsplan erstellen und verfolgen
-              </div>
-            </div>
-          </div>
-          <div className="feature">
-            <span className="feature-status"><Circle size={16} /></span>
+          <div className="feature teilweise">
+            <span className="feature-status"><Minus size={16} /></span>
             <div>
               <div className="feature-name">Statistiken</div>
               <div className="feature-detail">
                 Fortschritt über Wochen sehen
+              </div>
+            </div>
+          </div>
+          <div className="feature teilweise">
+            <span className="feature-status"><Minus size={16} /></span>
+            <div>
+              <div className="feature-name">Trainingsplan</div>
+              <div className="feature-detail">
+                Persönlichen Trainingsplan erstellen und verfolgen
               </div>
             </div>
           </div>
