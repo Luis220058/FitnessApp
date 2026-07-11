@@ -1,0 +1,210 @@
+/* ============================================
+   STATISTIK.CSS
+   ============================================ */
+
+.statistik {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 8px 16px 40px;
+}
+
+/* === WOCHEN-NAVIGATION === */
+
+.wochen-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 4px;
+}
+
+.wochen-pfeil {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.wochen-pfeil:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.wochen-pfeil:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.wochen-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.wochen-bereich {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.wochen-badge {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+/* === KACHELN === */
+
+.kacheln-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.kachel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 0.5px solid var(--glass-border);
+  border-top: 0.5px solid var(--glass-highlight);
+  border-radius: 16px;
+  padding: 18px 20px;
+}
+
+.kachel-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 10px;
+}
+
+.kachel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.kachel-dot.blau { background: var(--accent); }
+.kachel-dot.gruen { background: var(--success); }
+.kachel-dot.amber { background: var(--warning); }
+
+.kachel-wert {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.kachel-wert .einheit {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+.kachel-wert.blau { color: var(--accent); }
+.kachel-wert.gruen { color: var(--success); }
+.kachel-wert.amber { color: var(--warning); }
+
+.kachel-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* === LEER-HINWEIS === */
+
+.leer-hinweis {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* === RESPONSIVE: ab etwas breiter 3 Spalten === */
+
+@media (min-width: 380px) {
+  .kacheln-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .kachel-wert {
+    font-size: 24px;
+  }
+
+  .kachel-wert .einheit {
+    font-size: 13px;
+  }
+}
+
+/* === TAGES-STREIFEN === */
+
+.tage-streifen {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.tag-kachel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 4px;
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 12px;
+}
+
+.tag-kachel.heute {
+  border-color: var(--accent);
+  background: rgba(79, 124, 255, 0.08);
+}
+
+.tag-name {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.tag-zahl {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.tag-punkte {
+  display: flex;
+  gap: 3px;
+  min-height: 6px;
+}
+
+.punkt {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.punkt.orange { background: var(--warning); }
+.punkt.gruen { background: var(--success); }

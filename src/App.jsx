@@ -1,16 +1,14 @@
 /* ============================================
    APP.JSX — Rahmen mit Navigation
    
-   Navigation: Start · Sport
-   (Übersicht kommt später als dritter Punkt)
+   Navigation: Start · Sport · Statistik
    ============================================ */
 
 import { useState } from 'react'
-import { House, Dumbbell } from 'lucide-react'
-
+import { House, Dumbbell, ChartColumn } from 'lucide-react'
 import Home from './components/Home'
 import Sport from './components/Sport'
-
+import Statistik from './components/Statistik'
 import './App.css'
 
 function App() {
@@ -36,6 +34,7 @@ function App() {
       <main className="app-main">
         {seite === 'home' && <Home />}
         {seite === 'sport' && <Sport />}
+        {seite === 'statistik' && <Statistik />}
       </main>
 
       <nav className="app-nav">
@@ -53,6 +52,14 @@ function App() {
         >
           <span className="nav-icon"><Dumbbell size={20} /></span>
           <span className="nav-label">Sport</span>
+        </button>
+
+        <button
+          className={`nav-btn ${seite === 'statistik' ? 'aktiv' : ''}`}
+          onClick={() => setSeite('statistik')}
+        >
+          <span className="nav-icon"><ChartColumn size={20} /></span>
+          <span className="nav-label">Statistik</span>
         </button>
       </nav>
 
