@@ -1,14 +1,19 @@
 /* ============================================
    SATZLOGGER.JSX
    
-   GROSSE ÄNDERUNG: Übungen sind jetzt Daten.
+   NEU: Übungen sind jetzt Objekte { name, typ }
+   statt reiner Strings. typ ist "zusatz" (normales
+   Gewicht) oder "koerpergewicht" (Körpergewicht +
+   optionales Zusatzgewicht, z.B. bei Klimmzügen).
    
-   Gruppen und Übungen leben im State und in
-   localStorage. Der Nutzer legt sie selbst an.
+   Migration: alte, als String gespeicherte Übungen
+   werden beim Laden automatisch ins neue Format
+   überführt.
    
-   Zwei neue States:
-     bearbeiteModus  → zeigt die +/× Buttons
-     neueGruppe      → Text im Eingabefeld
+   Bei "koerpergewicht"-Übungen wird das zuletzt
+   geloggte Körpergewicht aus fitnessapp_gewicht
+   geholt und automatisch zum eingegebenen
+   Zusatzgewicht addiert.
    ============================================ */
 
 import { useState } from 'react'
@@ -19,36 +24,58 @@ import './SatzLogger.css'
 
 function SatzLogger() {
 
-  /* ===== GESPEICHERTE DATEN =====
-     Der Custom Hook macht Laden und Speichern
-     automatisch. Sieht aus wie useState. */
+  /* ===== GESPEICHERTE DATEN ===== */
 
   const [saetze, setSaetze] = useLocalStorage('fitnessapp_saetze', [])
   const [gruppen, setGruppen] = useLocalStorage('fitnessapp_gruppen', START_GRUPPEN)
 
+  // Körpergewichts-Verlauf — nur LESEN, kein Setter nötig.
+  // Gleicher Speicher-Schlüssel wie im Gewichtlogger.
+  const [gewichtsEintraege] = useLocalStorage('fitnessapp_gewicht', [])
 
-  /* ===== NORMALER STATE (nicht gespeichert) ===== */
+
+  /* ===== MIGRATION =====
+     Alte Übungen waren reine Strings ("Bankdrücken").
+     Neue Übungen sind Objekte ({ name, typ }).
+     Automatische Reparatur alter Daten. */
+
+  function migriereUebung(uebung) {
+    if (typeof uebung === 'object') return uebung
+    return { name: uebung, typ: 'zusatz' }
+  }
+
+  const gruppenMigriert = {}
+  for (const gruppenName of Object.keys(gruppen)) {
+    gruppenMigriert[gruppenName] = gruppen[gruppenName].map(migriereUebung)
+  }
+  const gruppenNamen = Object.keys(gruppenMigriert)
+
+
+  /* ===== NORMALER STATE ===== */
 
   const [gewaehlteGruppe, setGewaehlteGruppe] = useState(null)
+  // gewaehlteUebung bleibt ein simpler String (der Name) — einfacher
+  // zu vergleichen als ganze Objekte.
   const [gewaehlteUebung, setGewaehlteUebung] = useState(null)
-  const [gewicht, setGewicht] = useState('')
+
+  const [gewicht, setGewicht] = useState('')          // für "zusatz"-Übungen
+  const [zusatzgewicht, setZusatzgewicht] = useState('')  // für "koerpergewicht"-Übungen
   const [wiederholungen, setWiederholungen] = useState('')
   const [rpe, setRpe] = useState(7)
   const [notiz, setNotiz] = useState('')
 
-  // Bearbeiten-Modus: zeigt Lösch-Buttons
   const [bearbeiten, setBearbeiten] = useState(false)
 
-  // Eingabefelder fürs Anlegen
   const [neueGruppe, setNeueGruppe] = useState('')
   const [neueUebung, setNeueUebung] = useState('')
+  const [neuerTyp, setNeuerTyp] = useState('zusatz')  // Typ-Auswahl beim Anlegen
   const [zeigeGruppeFeld, setZeigeGruppeFeld] = useState(false)
   const [zeigeUebungFeld, setZeigeUebungFeld] = useState(false)
 
 
   /* ===== ABGELEITETE DATEN ===== */
 
-  // Lokales Datum statt toISOString() (das ist UTC) — sonst bekommen
+    // Lokales Datum statt toISOString() (das ist UTC) — sonst bekommen
   // Einträge kurz nach Mitternacht das Datum des Vortags und fallen
   // in Statistik.jsx aus der aktuellen Woche raus.
   function alsDatumString(date) {
@@ -59,7 +86,6 @@ function SatzLogger() {
   }
 
   const heute = alsDatumString(new Date())
-  const gruppenNamen = Object.keys(gruppen)
   const alleHeutigenSaetze = saetze.filter(satz => satz.datum === heute)
   const heutigeSaetze = alleHeutigenSaetze.filter(
     satz => satz.uebung === gewaehlteUebung
@@ -67,6 +93,18 @@ function SatzLogger() {
   const letztesMal = saetze.find(
     satz => satz.uebung === gewaehlteUebung && satz.datum !== heute
   )
+
+  // Das Übungs-Objekt der aktuell gewählten Übung finden
+  // (um an ihren "typ" ranzukommen)
+  const uebungObjekt = gewaehlteGruppe && gewaehlteUebung
+    ? gruppenMigriert[gewaehlteGruppe].find(u => u.name === gewaehlteUebung)
+    : null
+  const istKoerpergewicht = uebungObjekt?.typ === 'koerpergewicht'
+
+  // Aktuellstes Körpergewicht: der Eintrag mit dem neuesten Datum
+  const aktuellesKoerpergewicht = gewichtsEintraege.length > 0
+    ? [...gewichtsEintraege].sort((a, b) => b.datum.localeCompare(a.datum))[0].gewicht
+    : null
 
   function satzZahlFuerUebung(uebung) {
     return alleHeutigenSaetze.filter(satz => satz.uebung === uebung).length
@@ -88,16 +126,10 @@ function SatzLogger() {
   function legeGruppeAn() {
     const name = neueGruppe.trim()
     if (!name) return
-
-    // Gibt's die Gruppe schon?
     if (gruppen[name]) {
       alert('Diese Gruppe gibt es schon.')
       return
     }
-
-    /* Neues Objekt bauen, altes nicht verändern.
-       {...gruppen} kopiert alle alten Einträge,
-       dann kommt der neue dazu. */
     setGruppen({ ...gruppen, [name]: [] })
     setNeueGruppe('')
     setZeigeGruppeFeld(false)
@@ -108,14 +140,9 @@ function SatzLogger() {
     if (!confirm(`Gruppe "${name}" löschen? Die geloggten Sätze bleiben erhalten.`)) {
       return
     }
-
-    /* Kopie machen, Eintrag rauslöschen.
-       Die Sätze bleiben unangetastet — sie leben
-       in einem eigenen State. */
     const kopie = { ...gruppen }
     delete kopie[name]
     setGruppen(kopie)
-
     if (gewaehlteGruppe === name) {
       setGewaehlteGruppe(null)
       setGewaehlteUebung(null)
@@ -129,32 +156,32 @@ function SatzLogger() {
     const name = neueUebung.trim()
     if (!name || !gewaehlteGruppe) return
 
-    if (gruppen[gewaehlteGruppe].includes(name)) {
+    const bestehendeNamen = gruppenMigriert[gewaehlteGruppe].map(u => u.name)
+    if (bestehendeNamen.includes(name)) {
       alert('Diese Übung gibt es in dieser Gruppe schon.')
       return
     }
 
-    /* Neue Liste für diese Gruppe, alte Gruppen bleiben.
-       [...alteListe, neu] hängt hinten an. */
+    const neueUebungObjekt = { name: name, typ: neuerTyp }
+
     setGruppen({
       ...gruppen,
-      [gewaehlteGruppe]: [...gruppen[gewaehlteGruppe], name],
+      [gewaehlteGruppe]: [...gruppenMigriert[gewaehlteGruppe], neueUebungObjekt],
     })
     setNeueUebung('')
+    setNeuerTyp('zusatz')
     setZeigeUebungFeld(false)
   }
 
-  function loescheUebung(uebung) {
-    if (!confirm(`Übung "${uebung}" löschen? Die geloggten Sätze bleiben erhalten.`)) {
+  function loescheUebung(uebungName) {
+    if (!confirm(`Übung "${uebungName}" löschen? Die geloggten Sätze bleiben erhalten.`)) {
       return
     }
-
     setGruppen({
       ...gruppen,
-      [gewaehlteGruppe]: gruppen[gewaehlteGruppe].filter(u => u !== uebung),
+      [gewaehlteGruppe]: gruppenMigriert[gewaehlteGruppe].filter(u => u.name !== uebungName),
     })
-
-    if (gewaehlteUebung === uebung) {
+    if (gewaehlteUebung === uebungName) {
       setGewaehlteUebung(null)
     }
   }
@@ -163,8 +190,7 @@ function SatzLogger() {
   /* ===== AUSWAHL (Toggle) ===== */
 
   function waehleGruppe(gruppe) {
-    if (bearbeiten) return  // Im Bearbeiten-Modus nicht auswählen
-
+    if (bearbeiten) return
     if (gewaehlteGruppe === gruppe) {
       setGewaehlteGruppe(null)
       setGewaehlteUebung(null)
@@ -175,27 +201,46 @@ function SatzLogger() {
     setZeigeUebungFeld(false)
   }
 
-  function waehleUebung(uebung) {
+  function waehleUebung(uebungName) {
     if (bearbeiten) return
-
-    if (gewaehlteUebung === uebung) {
+    if (gewaehlteUebung === uebungName) {
       setGewaehlteUebung(null)
       return
     }
-    setGewaehlteUebung(uebung)
+    setGewaehlteUebung(uebungName)
+    setZusatzgewicht('')
   }
 
 
   /* ===== SÄTZE ===== */
 
   function speichereSatz() {
-    if (!gewicht || !wiederholungen) return
+    if (!wiederholungen) return
+
+    let tatsaechlichesGewicht
+
+    if (istKoerpergewicht) {
+      // Körpergewicht + Zusatzgewicht (Zusatz darf leer/0 sein)
+      if (!aktuellesKoerpergewicht) {
+        alert('Trag zuerst dein Körpergewicht im Profil ein.')
+        return
+      }
+      const zusatz = parseFloat(zusatzgewicht) || 0
+      tatsaechlichesGewicht = aktuellesKoerpergewicht + zusatz
+    } else {
+      if (!gewicht) return
+      tatsaechlichesGewicht = parseFloat(gewicht)
+    }
 
     const neuerSatz = {
       id: Date.now(),
       uebung: gewaehlteUebung,
       gruppe: gewaehlteGruppe,
-      gewicht: parseFloat(gewicht),
+      gewicht: tatsaechlichesGewicht,
+      // Bei Körpergewicht-Übungen merken wir uns zusätzlich, wie sich
+      // das Gewicht zusammensetzt — nützlich für die Anzeige später.
+      zusatzgewicht: istKoerpergewicht ? (parseFloat(zusatzgewicht) || 0) : null,
+      istKoerpergewicht: istKoerpergewicht,
       wiederholungen: parseInt(wiederholungen),
       rpe: rpe,
       notiz: notiz,
@@ -206,6 +251,8 @@ function SatzLogger() {
     setSaetze([neuerSatz, ...saetze])
     setWiederholungen('')
     setNotiz('')
+    // Gewicht-Feld NICHT leeren (man macht meist mehrere Sätze mit
+    // demselben Gewicht) — Zusatzgewicht aber schon, da öfter variiert.
   }
 
   function loescheSatz(id) {
@@ -217,7 +264,6 @@ function SatzLogger() {
 
   return (
     <div className="logger">
-
 
       {/* === GRUPPEN === */}
       <div className="section">
@@ -245,7 +291,6 @@ function SatzLogger() {
                     <span className="badge">{anzahl}</span>
                   )}
                 </button>
-
                 {bearbeiten && (
                   <button
                     className="entfernen-btn"
@@ -259,18 +304,13 @@ function SatzLogger() {
             )
           })}
 
-          {/* Plus-Button zum Anlegen */}
           {!zeigeGruppeFeld && (
-            <button
-              className="plus-btn"
-              onClick={() => setZeigeGruppeFeld(true)}
-            >
+            <button className="plus-btn" onClick={() => setZeigeGruppeFeld(true)}>
               +
             </button>
           )}
         </div>
 
-        {/* Eingabefeld für neue Gruppe */}
         {zeigeGruppeFeld && (
           <div className="neu-feld">
             <input
@@ -281,15 +321,10 @@ function SatzLogger() {
               placeholder="Name der Gruppe"
               autoFocus
             />
-            <button className="neu-btn" onClick={legeGruppeAn}>
-              Anlegen
-            </button>
+            <button className="neu-btn" onClick={legeGruppeAn}>Anlegen</button>
             <button
               className="abbrechen-btn"
-              onClick={() => {
-                setZeigeGruppeFeld(false)
-                setNeueGruppe('')
-              }}
+              onClick={() => { setZeigeGruppeFeld(false); setNeueGruppe('') }}
             >
               ×
             </button>
@@ -304,35 +339,38 @@ function SatzLogger() {
           <div className="section-label">Übung</div>
 
           <div className="uebungen-liste">
-            {gruppen[gewaehlteGruppe].map(uebung => {
-              const anzahl = satzZahlFuerUebung(uebung)
-              const istGewaehlt = gewaehlteUebung === uebung
+            {gruppenMigriert[gewaehlteGruppe].map(uebung => {
+              const anzahl = satzZahlFuerUebung(uebung.name)
+              const istGewaehlt = gewaehlteUebung === uebung.name
               return (
-                <div key={uebung}>
+                <div key={uebung.name}>
 
                   <div className="uebung-wrapper">
                     <button
                       className={`uebung-btn ${istGewaehlt ? 'aktiv' : ''}`}
-                      onClick={() => waehleUebung(uebung)}
+                      onClick={() => waehleUebung(uebung.name)}
                     >
-                      <span>{uebung}</span>
+                      <span>
+                        {uebung.name}
+                        {uebung.typ === 'koerpergewicht' && (
+                          <span className="typ-tag">KG</span>
+                        )}
+                      </span>
                       {anzahl > 0 && !bearbeiten && (
                         <span className="badge">{anzahl}</span>
                       )}
                     </button>
-
                     {bearbeiten && (
                       <button
                         className="entfernen-btn"
-                        onClick={() => loescheUebung(uebung)}
-                        aria-label={`${uebung} löschen`}
+                        onClick={() => loescheUebung(uebung.name)}
+                        aria-label={`${uebung.name} löschen`}
                       >
                         ×
                       </button>
                     )}
                   </div>
 
-                  {/* Formular klappt direkt darunter auf */}
                   {istGewaehlt && !bearbeiten && (
                     <div className="eingabe-bereich">
 
@@ -344,29 +382,76 @@ function SatzLogger() {
                       )}
 
                       <div className="eingabe-karte">
-                        <div className="eingabe-reihe">
-                          <div className="eingabe-feld">
-                            <label>Gewicht (kg)</label>
-                            <input
-                              type="number"
-                              inputMode="decimal"
-                              step="0.5"
-                              value={gewicht}
-                              onChange={(e) => setGewicht(e.target.value)}
-                              placeholder="0"
-                            />
+
+                        {istKoerpergewicht ? (
+                          /* === EINGABE FÜR KÖRPERGEWICHT-ÜBUNGEN === */
+                          <>
+                            {aktuellesKoerpergewicht ? (
+                              <div className="koerpergewicht-info">
+                                Körpergewicht: <strong>{aktuellesKoerpergewicht} kg</strong>
+                              </div>
+                            ) : (
+                              <div className="koerpergewicht-warnung">
+                                Kein Körpergewicht hinterlegt — trag es im Profil ein.
+                              </div>
+                            )}
+
+                            <div className="eingabe-reihe">
+                              <div className="eingabe-feld">
+                                <label>Zusatzgewicht (kg)</label>
+                                <input
+                                  type="number"
+                                  inputMode="decimal"
+                                  step="0.5"
+                                  value={zusatzgewicht}
+                                  onChange={(e) => setZusatzgewicht(e.target.value)}
+                                  placeholder="0"
+                                />
+                              </div>
+                              <div className="eingabe-feld">
+                                <label>Wiederholungen</label>
+                                <input
+                                  type="number"
+                                  inputMode="numeric"
+                                  value={wiederholungen}
+                                  onChange={(e) => setWiederholungen(e.target.value)}
+                                  placeholder="0"
+                                />
+                              </div>
+                            </div>
+
+                            {aktuellesKoerpergewicht && (
+                              <div className="gesamt-vorschau">
+                                Gesamt: {aktuellesKoerpergewicht + (parseFloat(zusatzgewicht) || 0)} kg
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          /* === EINGABE FÜR NORMALE ÜBUNGEN === */
+                          <div className="eingabe-reihe">
+                            <div className="eingabe-feld">
+                              <label>Gewicht (kg)</label>
+                              <input
+                                type="number"
+                                inputMode="decimal"
+                                step="0.5"
+                                value={gewicht}
+                                onChange={(e) => setGewicht(e.target.value)}
+                                placeholder="0"
+                              />
+                            </div>
+                            <div className="eingabe-feld">
+                              <label>Wiederholungen</label>
+                              <input
+                                type="number"
+                                inputMode="numeric"
+                                value={wiederholungen}
+                                onChange={(e) => setWiederholungen(e.target.value)}
+                                placeholder="0"
+                              />
+                            </div>
                           </div>
-                          <div className="eingabe-feld">
-                            <label>Wiederholungen</label>
-                            <input
-                              type="number"
-                              inputMode="numeric"
-                              value={wiederholungen}
-                              onChange={(e) => setWiederholungen(e.target.value)}
-                              placeholder="0"
-                            />
-                          </div>
-                        </div>
+                        )}
 
                         <div className="rpe-bereich">
                           <div className="rpe-kopf">
@@ -415,6 +500,11 @@ function SatzLogger() {
                                   <span className="satz-mal">×</span>
                                   <span className="satz-reps">{satz.wiederholungen}</span>
                                 </div>
+                                {satz.istKoerpergewicht && (
+                                  <div className="satz-notiz">
+                                    Körpergewicht + {satz.zusatzgewicht} kg
+                                  </div>
+                                )}
                                 {satz.notiz && (
                                   <div className="satz-notiz">{satz.notiz}</div>
                                 )}
@@ -440,7 +530,6 @@ function SatzLogger() {
               )
             })}
 
-            {/* Plus-Button für neue Übung */}
             {!zeigeUebungFeld && (
               <button
                 className="plus-btn breit"
@@ -450,35 +539,54 @@ function SatzLogger() {
               </button>
             )}
 
-            {/* Eingabefeld für neue Übung */}
             {zeigeUebungFeld && (
-              <div className="neu-feld">
+              <div className="neu-uebung-formular">
                 <input
                   type="text"
                   value={neueUebung}
                   onChange={(e) => setNeueUebung(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && legeUebungAn()}
                   placeholder="Name der Übung"
                   autoFocus
                 />
-                <button className="neu-btn" onClick={legeUebungAn}>
-                  Anlegen
-                </button>
-                <button
-                  className="abbrechen-btn"
-                  onClick={() => {
-                    setZeigeUebungFeld(false)
-                    setNeueUebung('')
-                  }}
-                >
-                  ×
-                </button>
+
+                {/* Typ-Auswahl: Körpergewicht oder Zusatzgewicht */}
+                <div className="typ-auswahl">
+                  <button
+                    className={`typ-btn ${neuerTyp === 'zusatz' ? 'aktiv' : ''}`}
+                    onClick={() => setNeuerTyp('zusatz')}
+                  >
+                    Zusatzgewicht
+                  </button>
+                  <button
+                    className={`typ-btn ${neuerTyp === 'koerpergewicht' ? 'aktiv' : ''}`}
+                    onClick={() => setNeuerTyp('koerpergewicht')}
+                  >
+                    Körpergewicht
+                  </button>
+                </div>
+
+                <div className="neu-feld">
+                  <button className="neu-btn" onClick={legeUebungAn}>
+                    Anlegen
+                  </button>
+                  <button
+                    className="abbrechen-btn"
+                    onClick={() => {
+                      setZeigeUebungFeld(false)
+                      setNeueUebung('')
+                      setNeuerTyp('zusatz')
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
               </div>
             )}
           </div>
         </div>
       )}
-      
+
+
       <Tagesuebersicht saetze={alleHeutigenSaetze} onLoeschen={loescheSatz} />
 
     </div>

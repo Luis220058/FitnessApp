@@ -1,18 +1,16 @@
 /* ============================================
    UEBUNGEN.JS — nur noch STARTDATEN
    
-   Wichtige Änderung: Diese Liste ist nicht mehr
-   "die Übungen". Sie ist nur das, was beim
-   allerersten Öffnen der App drinsteht.
-   
-   Danach lebt die echte Liste im localStorage
-   und der Nutzer verwaltet sie selbst.
+   NEU: Übungen sind jetzt Objekte, nicht mehr
+   nur Namen. { name, typ } — typ ist entweder
+   "zusatz" (normales Gewicht) oder
+   "koerpergewicht" (Körpergewicht + optional Zusatz).
    ============================================ */
 
 export const START_GRUPPEN = {
   "Beispiel": [
-    "Bankdrücken",
-    "Kniebeuge",
-    "Klimmzüge",
+    { name: "Bankdrücken", typ: "zusatz" },
+    { name: "Kniebeuge", typ: "zusatz" },
+    { name: "Klimmzüge", typ: "koerpergewicht" },
   ],
 }

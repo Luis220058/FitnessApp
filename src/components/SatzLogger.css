@@ -525,7 +525,7 @@
   border-radius: 10px;
   color: var(--text-primary);
   font-family: inherit;
-  font-size: 16px;
+  font-size: 14px;
   outline: none;
 }
 
@@ -608,4 +608,120 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* ============================================
+   NEU: Körpergewicht-Übungen
+   ============================================ */
+
+/* Kleines "KG"-Tag neben Übungen mit Körpergewicht-Typ */
+.typ-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  margin-left: 8px;
+  background: rgba(52, 211, 153, 0.15);
+  border-radius: 5px;
+  color: var(--success);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  vertical-align: middle;
+}
+
+/* Info-Zeile: aktuelles Körpergewicht */
+.koerpergewicht-info {
+  font-size: 13px;
+  color: var(--text-subtle);
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  background: rgba(52, 211, 153, 0.06);
+  border-radius: 10px;
+  border-left: 2px solid var(--success);
+}
+
+.koerpergewicht-info strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* Warnung, falls kein Körpergewicht hinterlegt ist */
+.koerpergewicht-warnung {
+  font-size: 12px;
+  color: var(--warning);
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  background: rgba(251, 191, 36, 0.06);
+  border-radius: 10px;
+  border-left: 2px solid var(--warning);
+}
+
+/* Live-Vorschau: Körpergewicht + Zusatz = Gesamt */
+.gesamt-vorschau {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 16px;
+  padding: 8px;
+  background: rgba(79, 124, 255, 0.06);
+  border-radius: 8px;
+}
+
+/* === Formular zum Anlegen neuer Übungen (mit Typ-Auswahl) === */
+
+.neu-uebung-formular {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid var(--accent);
+  border-radius: 12px;
+}
+
+.neu-uebung-formular > input {
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 16px;
+  outline: none;
+}
+
+.neu-uebung-formular > input:focus {
+  border-color: var(--accent);
+}
+
+.typ-auswahl {
+  display: flex;
+  gap: 6px;
+}
+
+.typ-btn {
+  flex: 1;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 9px;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.typ-btn.aktiv {
+  background: rgba(79, 124, 255, 0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.neu-uebung-formular .neu-feld {
+  margin-top: 0;
 }
