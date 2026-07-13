@@ -9,13 +9,13 @@
    der thematisch passende Logger einbindet.
    ============================================ */
 
-import GewichtLogger from './GewichtLogger'
+import Gewichtlogger from './Gewichtlogger'
 import './Profil.css'
 
 function Profil() {
   return (
     <div className="profil">
-      <GewichtLogger />
+      <Gewichtlogger />
     </div>
   )
 }
