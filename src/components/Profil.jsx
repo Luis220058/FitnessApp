@@ -10,12 +10,14 @@
    ============================================ */
 
 import Gewichtlogger from './Gewichtlogger'
+import ErnaehrungLogger from './ErnaehrungLogger'
 import './Profil.css'
 
 function Profil() {
   return (
     <div className="profil">
       <Gewichtlogger />
+      <ErnaehrungLogger />
     </div>
   )
 }

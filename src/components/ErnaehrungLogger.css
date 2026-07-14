@@ -1,0 +1,231 @@
+/* ============================================
+   ERNAEHRUNGLOGGER.CSS
+   ============================================ */
+
+.ernaehrung-logger {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 8px 16px 40px;
+}
+
+.section {
+  margin-top: 20px;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 10px;
+}
+
+/* === EINGABE-KARTE === */
+
+.ernaehrung-karte {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 0.5px solid var(--glass-border);
+  border-top: 0.5px solid var(--glass-highlight);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.eingabe-reihe {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.eingabe-feld {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  min-width: 0;
+}
+
+.eingabe-reihe .eingabe-feld {
+  margin-bottom: 0;
+}
+
+.eingabe-feld label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.eingabe-feld input {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.eingabe-feld input:focus {
+  border-color: var(--accent);
+}
+
+.eingabe-feld input::placeholder {
+  color: #334155;
+}
+
+.eingabe-feld input[type="number"]::-webkit-inner-spin-button,
+.eingabe-feld input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.speichern-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--accent);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.speichern-btn:hover {
+  background: var(--accent-light);
+}
+
+.speichern-btn:active {
+  transform: scale(0.98);
+}
+
+/* === TAGESSUMME === */
+
+.summe-karte {
+  margin-top: 16px;
+  padding: 20px;
+  background: rgba(79, 124, 255, 0.06);
+  border: 0.5px solid rgba(79, 124, 255, 0.2);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.summe-kalorien {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+}
+
+.summe-kalorien .einheit {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.summe-makros {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+}
+
+.makro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.makro-wert {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.makro-wert.carbs { color: var(--warning); }
+.makro-wert.protein { color: var(--success); }
+.makro-wert.fett { color: var(--accent); }
+
+.makro-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* === EINTRÄGE-LISTE === */
+
+.eintraege-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.eintrag-zeile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 12px;
+}
+
+.eintrag-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.eintrag-haupt {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.eintrag-kalorien {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.eintrag-notiz {
+  font-size: 12px;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.eintrag-makros {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+.loeschen-btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #334155;
+  font-size: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.loeschen-btn:hover {
+  color: var(--danger);
+}
