@@ -6,7 +6,7 @@
    "Über diese App"-Link auf dem Dashboard.
    
    Feature-Liste aktualisiert: vieles, was hier
-   noch offen war, ist inzwischen fertig.
+   noch offen war, ist inzwischen fertig
    ============================================ */
 
 import { Check } from 'lucide-react'
